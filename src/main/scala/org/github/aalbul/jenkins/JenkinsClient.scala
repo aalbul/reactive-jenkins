@@ -1,10 +1,8 @@
 package org.github.aalbul.jenkins
 
-import akka.actor.{ActorSystem, Actor}
+import akka.actor.ActorSystem
 import org.github.aalbul.jenkins.http.{HttpClientConf, Auth, HttpClient}
 import org.github.aalbul.jenkins.json.JsonSupport
-import scala.concurrent.ExecutionContext
-import org.github.aalbul.jenkins.error.ErrorHandler
 
 /**
  * Created by nuru on 3/30/14.
@@ -12,12 +10,8 @@ import org.github.aalbul.jenkins.error.ErrorHandler
  * Main entry point to communicate with Jenkins.
  * Extensible. Additional functionality can be added with the help of mix-ins
  */
-class JenkinsClient(val config: ClientConfig) extends Actor with JsonSupport with ErrorHandler {
-  protected val http = new HttpClient(context.system, context.dispatcher, HttpClientConf(config.auth))
-
-  override def receive = {
-    case _ =>
-  }
+class JenkinsClient(protected val system: ActorSystem, protected val config: ClientConfig) extends JsonSupport {
+  protected val http = new HttpClient(system, system.dispatcher, HttpClientConf(config.auth))
 }
 
 /**

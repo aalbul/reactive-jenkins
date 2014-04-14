@@ -15,6 +15,7 @@ case class ChangeSetItem(id: String, msg: String, affectedPaths: List[String], c
 class ChangeOperationType extends TypeReference[ChangeOperation.type]
 object ChangeOperation extends Enumeration {
   type ChangeOperation = Value
+  val Add = Value("add")
   val Edit = Value("edit")
   val Create = Value("create")
   val Delete = Value("delete")
