@@ -17,9 +17,9 @@ class HttpClient(actorSystem: ActorSystem, ec: ExecutionContext, conf: HttpClien
 
   private val pipeline: HttpRequest => Future[HttpResponse] = {
     val sr = sendReceive(actorSystem, ec)
-    conf.auth.map {
+    conf.auth.fold(sr) {
       case UserPasswordAuth(name, pass) => addCredentials(BasicHttpCredentials(name, pass)) ~> sr
-    }.getOrElse(sr)
+    }
   }
 
   override def apply(request: HttpRequest): Future[HttpResponse] = pipeline(request)
