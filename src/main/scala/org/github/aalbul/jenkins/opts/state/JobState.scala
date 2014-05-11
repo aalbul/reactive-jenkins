@@ -9,5 +9,5 @@ sealed trait JobState
 case object NotBuilt extends JobState
 case object Failed extends JobState
 case object Successful extends JobState
-case object Started extends JobState
+case object Running extends JobState
 case object Aborted extends JobState

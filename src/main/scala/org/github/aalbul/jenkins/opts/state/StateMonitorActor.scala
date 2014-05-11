@@ -62,7 +62,7 @@ class StateMonitorActor(client: InformationalOpts) extends Actor {
     }
 
     def extractState(summary: BuildInfoSummary) = summary match {
-      case summary@BuildInfoSummary(_, true, None) => Started
+      case summary@BuildInfoSummary(_, true, None) => Running
       case summary@BuildInfoSummary(_, false, None) => NotBuilt
       case summary@BuildInfoSummary(_, _, Some(BuildStatus.Failure | BuildStatus.Unstable)) => Failed
       case summary@BuildInfoSummary(_, _, Some(BuildStatus.Success)) => Successful

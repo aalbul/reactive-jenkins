@@ -21,5 +21,5 @@ class JenkinsClient(protected val system: ActorSystem, protected val config: Cli
  * @param auth - authentication details (optional)
  */
 case class ClientConfig(host: String, port: Option[Int], auth: Option[Auth] = None) {
-  def url = s"http://$host${port.map(port => s":$port").getOrElse("")}"
+  def url = s"http://$host${port.fold("")(port => s":$port")}"
 }

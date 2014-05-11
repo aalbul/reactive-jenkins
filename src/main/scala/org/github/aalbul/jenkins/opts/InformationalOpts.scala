@@ -7,6 +7,7 @@ import org.github.aalbul.jenkins.domain.JobList
 import org.github.aalbul.jenkins.domain.BuildInfo
 import org.github.aalbul.jenkins.domain.UserList
 import org.github.aalbul.jenkins.domain.Job
+import scala.concurrent.Future
 
 /**
  * Created by nuru on 3/30/14.
@@ -37,8 +38,10 @@ trait InformationalOpts { this: JenkinsClient =>
    * @param buildId - requested job id
    */
   def buildInfo(jobName: String, buildId: Int) =
-    http(Get(s"${config.url}/job/$jobName/$buildId/api/json")).map(resp => mapper.readValue[BuildInfo](resp.entity.asString))
-
+    http(Get(s"${config.url}/job/$jobName/$buildId/api/json")).flatMap { resp =>
+      if (resp.status.isSuccess) { Future.successful(mapper.readValue[BuildInfo](resp.entity.asString)) }
+      else Future.failed(new IllegalArgumentException("Build not found"))
+    }
 
   /**
    * Retrieve user list
